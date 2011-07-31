@@ -3,6 +3,7 @@ Properties {
     _RedTex ("Texture", 2D) = "white" { }
     _GreenTex ("Texture", 2D) = "white" { }
     _BlueTex ("Texture", 2D) = "white" { }
+	_Negative ("Negative", Range(0, 1)) = 0
 }
 SubShader {
     Pass {
@@ -17,6 +18,7 @@ CGPROGRAM
 sampler2D _RedTex;
 sampler2D _GreenTex;
 sampler2D _BlueTex;
+float _Negative;
 
 struct v2f {
     float4  pos : SV_POSITION;
@@ -41,9 +43,12 @@ v2f vert (appdata_base v)
 
 half4 frag (v2f i) : COLOR
 {
-	half r = 1 - tex2D(_RedTex, i.uvRed).r;
-	half g = 1 - tex2D(_GreenTex, i.uvGreen).g;
-	half b = 1 - tex2D(_BlueTex, i.uvBlue).b;
+	half r = tex2D(_RedTex, i.uvRed).r;
+	half g = tex2D(_GreenTex, i.uvGreen).g;
+	half b = tex2D(_BlueTex, i.uvBlue).b;
+	r = (1 - r) * (1 - _Negative) + r * _Negative;
+	g = (1 - g) * (1 - _Negative) + g * _Negative;
+	b = (1 - b) * (1 - _Negative) + b * _Negative;
     return half4(r, g, b, 1);
 }
 ENDCG

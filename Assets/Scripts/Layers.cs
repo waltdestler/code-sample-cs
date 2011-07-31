@@ -16,9 +16,9 @@
 	public const int RbMask = 1 << Rb;
 	public const int GbMask = 1 << Gb;
 
-	public const int RCollisionMask = RgbMask | RMask | RgMask | RbMask;
-	public const int GCollisionMask = RgbMask | GMask | RgMask | GbMask;
-	public const int BCollisionMask = RgbMask | BMask | RbMask | GbMask;
+	public const int RCollisionMask = /*RgbMask |*/ RMask | RgMask | RbMask;
+	public const int GCollisionMask = /*RgbMask |*/ GMask | RgMask | GbMask;
+	public const int BCollisionMask = /*RgbMask |*/ BMask | RbMask | GbMask;
 
 	public static int FromRgbMode(RgbMode mode)
 	{

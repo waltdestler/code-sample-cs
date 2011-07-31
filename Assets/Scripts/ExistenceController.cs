@@ -9,16 +9,23 @@ public class ExistenceController : MonoBehaviour
 	private RgbControl _rgb;
 	private bool _exists = true;
 	private Collider _collider;
+	private bool _originalIsKinematic;
 
 	public void Awake()
 	{
 		_rgb = GetComponent<RgbControl>();
 		_collider = GetComponent<Collider>();
+		if(rigidbody != null)
+			_originalIsKinematic = rigidbody.isKinematic;
 	}
 
 	public void Update()
 	{
-		// Don't update if not close enough to player.
+		// Don't dissappear if not in rgb mode.
+		if(_rgb.RgbMode == RgbMode.Rgb)
+			return;
+
+		// Don't dissappear if not close enough to player.
 		Vector3 playerPos = Player.Current.Eyepoint.position;
 		float sqrPlayerDist = (transform.position - playerPos).sqrMagnitude;
 		float sqrFogDist = RenderSettings.fogEndDistance * RenderSettings.fogEndDistance;
@@ -52,22 +59,22 @@ public class ExistenceController : MonoBehaviour
 			if(_exists && !exists)
 			{
 				_exists = false;
-				//if(renderer != null)
-				//	renderer.enabled = false;
+				if(renderer != null)
+					renderer.enabled = false;
 				if(_collider != null)
 					_collider.enabled = false;
-				if(rigidbody != null)
+				if(rigidbody != null && !_originalIsKinematic)
 					rigidbody.isKinematic = true;
 				print("Hid " + name + " (LOS check).");
 			}
 			else if(!_exists && exists)
 			{
 				_exists = true;
-				//if(renderer != null)
-				//	renderer.enabled = true;
+				if(renderer != null)
+					renderer.enabled = true;
 				if(_collider != null)
 					_collider.enabled = true;
-				if(rigidbody != null)
+				if(rigidbody != null && !_originalIsKinematic)
 					rigidbody.isKinematic = false;
 				print("Showed " + name + " (LOS check).");
 			}
