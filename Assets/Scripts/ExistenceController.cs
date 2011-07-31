@@ -8,13 +8,11 @@ public class ExistenceController : MonoBehaviour
 
 	private RgbControl _rgb;
 	private bool _exists = true;
-	private Collider _collider;
 	private bool _originalIsKinematic;
 
 	public void Awake()
 	{
 		_rgb = GetComponent<RgbControl>();
-		_collider = GetComponent<Collider>();
 		if(rigidbody != null)
 			_originalIsKinematic = rigidbody.isKinematic;
 	}
@@ -61,8 +59,8 @@ public class ExistenceController : MonoBehaviour
 				_exists = false;
 				if(renderer != null)
 					renderer.enabled = false;
-				if(_collider != null)
-					_collider.enabled = false;
+				if(collider != null)
+					collider.enabled = false;
 				if(rigidbody != null && !_originalIsKinematic)
 					rigidbody.isKinematic = true;
 				print("Hid " + name + " (LOS check).");
@@ -72,8 +70,8 @@ public class ExistenceController : MonoBehaviour
 				_exists = true;
 				if(renderer != null)
 					renderer.enabled = true;
-				if(_collider != null)
-					_collider.enabled = true;
+				if(collider != null)
+					collider.enabled = true;
 				if(rigidbody != null && !_originalIsKinematic)
 					rigidbody.isKinematic = false;
 				print("Showed " + name + " (LOS check).");
