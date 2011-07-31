@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\ExistenceController.cs" />
      <Compile Include="Assets\Scripts\Layers.cs" />
      <Compile Include="Assets\Scripts\LookAtPlayer.cs" />
+     <Compile Include="Assets\Scripts\NextLevelAction.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\RgbControl.cs" />
      <Compile Include="Assets\Scripts\WatchPoint.cs" />
