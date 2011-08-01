@@ -4,6 +4,8 @@ Properties {
     _GreenTex ("Texture", 2D) = "white" { }
     _BlueTex ("Texture", 2D) = "white" { }
 	_Negative ("Negative", Range(0, 1)) = 0
+	_PreColor ("Pre-Negative Color", Color) = (1,1,1,1)
+	_PostColor ("Post-Negative Color", Color) = (1,1,1,1)
 }
 SubShader {
     Pass {
@@ -19,6 +21,8 @@ sampler2D _RedTex;
 sampler2D _GreenTex;
 sampler2D _BlueTex;
 float _Negative;
+fixed4 _PreColor;
+fixed4 _PostColor;
 
 struct v2f {
     float4  pos : SV_POSITION;
@@ -43,13 +47,16 @@ v2f vert (appdata_base v)
 
 half4 frag (v2f i) : COLOR
 {
-	half r = tex2D(_RedTex, i.uvRed).r;
-	half g = tex2D(_GreenTex, i.uvGreen).g;
-	half b = tex2D(_BlueTex, i.uvBlue).b;
+	half r = tex2D(_RedTex, i.uvRed).r * _PreColor.r;
+	half g = tex2D(_GreenTex, i.uvGreen).g * _PreColor.g;
+	half b = tex2D(_BlueTex, i.uvBlue).b * _PreColor.b;
 	r = (1 - r) * (1 - _Negative) + r * _Negative;
 	g = (1 - g) * (1 - _Negative) + g * _Negative;
 	b = (1 - b) * (1 - _Negative) + b * _Negative;
-    return half4(r, g, b, 1);
+	r *= _PostColor.r;
+	g *= _PostColor.g;
+	b *= _PostColor.b;
+    return half4(r, g, b, _PostColor.a);
 }
 ENDCG
 

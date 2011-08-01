@@ -1,14 +1,19 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class NextLevelAction: MonoBehaviour
 {
+	public float Delay = 0;
+
 	public void DoActivateTrigger()
 	{
-		Invoke("NextLevel", 2);
+		StartCoroutine(NextLevel());
 	}
 
-	private void NextLevel()
+	private IEnumerator NextLevel()
 	{
+		yield return new WaitForSeconds(Delay);
+		yield return Player.Current.CameraCombiner.StartFadeOut();
 		Application.LoadLevel(Application.loadedLevel + 1);
 	}
 }

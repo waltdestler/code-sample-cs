@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
 	public Transform CarryPoint;
 	public float PickUpRange = 2;
 	public float RadiusWhenCarrying = 1;
+	public CameraCombiner CameraCombiner;
 
 	private Carryable _carriedObject;
 
