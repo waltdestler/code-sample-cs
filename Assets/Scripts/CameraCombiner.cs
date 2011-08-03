@@ -10,15 +10,21 @@ public class CameraCombiner : MonoBehaviour
 	public ColorCam RedCamera;
 	public ColorCam GreenCamera;
 	public ColorCam BlueCamera;
-	public Material FullscreenQuadMaterial;
+	public Material RedCombiner;
+	public Material GreenCombiner;
+	public Material BlueCombiner;
 	public float FadeInTime = 1;
 	public float FadeOutTime = 1;
 
-	private Material _mat;
+	private Material _redMat;
+	private Material _greenMat;
+	private Material _blueMat;
 	
 	public void Awake()
 	{
-		_mat = new Material(FullscreenQuadMaterial);
+		_redMat = new Material(RedCombiner);
+		_greenMat = new Material(GreenCombiner);
+		_blueMat = new Material(BlueCombiner);
 	}
 
 	public void Start()
@@ -28,11 +34,33 @@ public class CameraCombiner : MonoBehaviour
 
 	public void OnPostRender()
 	{
-		_mat.SetTexture("_RedTex", RedCamera.RenderTexture);
-		_mat.SetTexture("_GreenTex", GreenCamera.RenderTexture);
-		_mat.SetTexture("_BlueTex", BlueCamera.RenderTexture);
-		_mat.SetPass(0);
+		_redMat.SetTexture("_RedTex", RedCamera.RenderTexture);
+		_redMat.SetPass(0);
+		DrawFullscreenQuad();
 
+		_greenMat.SetTexture("_GreenTex", GreenCamera.RenderTexture);
+		_greenMat.SetPass(0);
+		DrawFullscreenQuad();
+
+		_blueMat.SetTexture("_BlueTex", BlueCamera.RenderTexture);
+		_blueMat.SetPass(0);
+		DrawFullscreenQuad();
+	}
+
+	public void OnDestroy()
+	{
+		Destroy(_redMat);
+		Destroy(_greenMat);
+		Destroy(_blueMat);
+	}
+
+	public Coroutine StartFadeOut()
+	{
+		return StartCoroutine(FadeOut());
+	}
+
+	private static void DrawFullscreenQuad()
+	{
 		GL.PushMatrix();
 		GL.LoadOrtho();
 		GL.LoadIdentity();
@@ -49,43 +77,47 @@ public class CameraCombiner : MonoBehaviour
 		GL.PopMatrix();
 	}
 
-	public void OnDestroy()
-	{
-		Destroy(_mat);
-	}
-
-	public Coroutine StartFadeOut()
-	{
-		return StartCoroutine(FadeOut());
-	}
-
 	private IEnumerator FadeIn()
 	{
 		Color startColor = Color.black;
-		Color endColor = _mat.GetColor("_PreColor");
-		_mat.SetColor("_PreColor", startColor);
+		Color endColor = new Color(
+			_redMat.GetFloat("_PreFactor"),
+			_greenMat.GetFloat("_PreFactor"),
+			_blueMat.GetFloat("_PreFactor"));
+		_redMat.SetFloat("_PreFactor", startColor.r);
+		_greenMat.SetFloat("_PreFactor", startColor.g);
+		_blueMat.SetFloat("_PreFactor", startColor.b);
 		yield return 0;
 		float startTime = Time.time;
 		do
 		{
 			yield return 0;
 			Color c = Color.Lerp(startColor, endColor, (Time.time - startTime) / FadeInTime);
-			_mat.SetColor("_PreColor", c);
+			_redMat.SetFloat("_PreFactor", c.r);
+			_greenMat.SetFloat("_PreFactor", c.g);
+			_blueMat.SetFloat("_PreFactor", c.b);
 		}
 		while(Time.time - startTime <= FadeInTime);
 	}
 
 	private IEnumerator FadeOut()
 	{
-		Color startColor = _mat.GetColor("_PreColor");
+		Color startColor = new Color(
+			_redMat.GetFloat("_PreFactor"),
+			_greenMat.GetFloat("_PreFactor"),
+			_blueMat.GetFloat("_PreFactor"));
 		Color endColor = Color.black;
-		_mat.SetColor("_PreColor", startColor);
+		_redMat.SetFloat("_PreFactor", startColor.r);
+		_greenMat.SetFloat("_PreFactor", startColor.g);
+		_blueMat.SetFloat("_PreFactor", startColor.b);
 		yield return 0;
 		float startTime = Time.time;
 		do
 		{
 			Color c = Color.Lerp(startColor, endColor, (Time.time - startTime) / FadeOutTime);
-			_mat.SetColor("_PreColor", c);
+			_redMat.SetFloat("_PreFactor", c.r);
+			_greenMat.SetFloat("_PreFactor", c.g);
+			_blueMat.SetFloat("_PreFactor", c.b);
 			yield return 0;
 		}
 		while(Time.time - startTime <= FadeOutTime);
