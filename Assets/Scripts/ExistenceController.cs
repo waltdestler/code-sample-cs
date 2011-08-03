@@ -73,7 +73,10 @@ public class ExistenceController : MonoBehaviour
 				if(collider != null)
 					collider.enabled = true;
 				if(rigidbody != null && !_originalIsKinematic)
+				{
 					rigidbody.isKinematic = false;
+					rigidbody.WakeUp();
+				}
 				print("Showed " + name + " (LOS check).");
 			}
 		}

@@ -60,11 +60,11 @@ public class Constants : ScriptableObject
 
 [Flags] public enum RgbMode
 {
-	Rgb = 7,
 	R = 1,
 	G = 2,
 	B = 4,
 	Rg = 3,
 	Rb = 5,
 	Gb = 6,
+	Rgb = 7,
 }

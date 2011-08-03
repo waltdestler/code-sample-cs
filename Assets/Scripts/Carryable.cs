@@ -36,6 +36,7 @@ public class Carryable : MonoBehaviour
 		if(rigidbody != null)
 		{
 			rigidbody.isKinematic = _wasKinematic;
+			rigidbody.WakeUp();
 		}
 		if(collider != null)
 		{

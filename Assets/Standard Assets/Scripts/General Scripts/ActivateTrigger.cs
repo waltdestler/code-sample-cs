@@ -19,7 +19,7 @@ public class ActivateTrigger : MonoBehaviour {
 	public int triggerCount = 1;///
 	public bool repeatTrigger = false;
 	
-	void DoActivateTrigger () {
+	public void DoActivateTrigger () {
 		triggerCount--;
 
 		if (triggerCount == 0 || repeatTrigger) {
@@ -56,7 +56,7 @@ public class ActivateTrigger : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter (Collider other) {
+	public void OnTriggerEnter (Collider other) {
 		DoActivateTrigger ();
 	}
 }
