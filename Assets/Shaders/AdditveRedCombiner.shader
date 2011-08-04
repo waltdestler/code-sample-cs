@@ -38,7 +38,7 @@ v2f vert (appdata_base v)
 half4 frag (v2f i) : COLOR
 {
 	half r = tex2D(_RedTex, i.uvRed).r * _PreFactor;
-	r = (1 - r) * (1 - _Negative) + r * _Negative;
+	r = r * (1 - _Negative) + (1 - r) * _Negative;
 	r *= _PostFactor;
     return half4(r, 0, 0, 1);
 }

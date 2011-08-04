@@ -38,7 +38,7 @@ v2f vert (appdata_base v)
 half4 frag (v2f i) : COLOR
 {
 	half b = tex2D(_BlueTex, i.uvBlue).b * _PreFactor;
-	b = (1 - b) * (1 - _Negative) + b * _Negative;
+	b = b * (1 - _Negative) + (1 - b) * _Negative;
 	b *= _PostFactor;
     return half4(0, 0, b, 1);
 }

@@ -38,7 +38,7 @@ v2f vert (appdata_base v)
 half4 frag (v2f i) : COLOR
 {
 	half g = tex2D(_GreenTex, i.uvGreen).g * _PreFactor;
-	g = (1 - g) * (1 - _Negative) + g * _Negative;
+	g = g * (1 - _Negative) + (1 - g) * _Negative;
 	g *= _PostFactor;
     return half4(0, g, 0, 1);
 }
