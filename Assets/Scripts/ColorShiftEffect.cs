@@ -6,6 +6,13 @@ public class ColorShiftEffect : ImageEffectBase
 	public float HueShiftDegrees;
 	public float SaturationFactor = 1;
 	public float ValueFactor = 1;
+	public bool OverrideColorBlindSetting;
+
+	public void Update()
+	{
+		if(!OverrideColorBlindSetting)
+			HueShiftDegrees = Settings.ColorBlindHueShift;
+	}
 
 	// Called by camera to apply image effect
 	public void OnRenderImage(RenderTexture source, RenderTexture destination)

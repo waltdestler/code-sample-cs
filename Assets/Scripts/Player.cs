@@ -29,6 +29,10 @@ public class Player : MonoBehaviour
 
 	public void Update()
 	{
+		// Don't update if paused.
+		if(Time.timeScale == 0)
+			return;
+
 		// Pick up / put down object?
 		if(Input.GetButtonDown("Fire1"))
 		{
@@ -104,6 +108,10 @@ public class Player : MonoBehaviour
 
 	public void LateUpdate()
 	{
+		// Don't update if paused.
+		if(Time.timeScale == 0)
+			return;
+
 		// Move carried object to the carry point.
 		if(_carriedObject != null)
 			_carriedObject.MoveTo(CarryPoint.position, CarryPoint.rotation);
