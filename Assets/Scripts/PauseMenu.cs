@@ -48,6 +48,16 @@ public class PauseMenu : MonoBehaviour
 		GUILayout.Label("Color Blind Hue Shift:");
 		Settings.ColorBlindHueShift = GUILayout.HorizontalSlider(Settings.ColorBlindHueShift, 0, 360);
 
+		GUILayout.Label("Graphics Quality:");
+		GUILayout.BeginHorizontal();
+		for(int i = 0; i < 6; i++)
+		{
+			QualityLevel ql = (QualityLevel)i;
+			if(GUILayout.Toggle(QualitySettings.currentLevel == ql, ql.ToString()))
+				QualitySettings.currentLevel = ql;
+		}
+		GUILayout.EndHorizontal();
+
 		GUILayout.FlexibleSpace();
 		if(GUILayout.Button("Resume"))
 			UnPause();
