@@ -1,14 +1,18 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 [RequireComponent(typeof(RgbControl))]
 public class ExistenceController : MonoBehaviour
 {
 	public Transform[] WatchPoints;
 	public bool Permanent;
+	public bool CoincisionSensitive;
 
 	private RgbControl _rgb;
 	private bool _exists = true;
 	private bool _originalIsKinematic;
+	private readonly HashSet<Collider> _inTrigger = new HashSet<Collider>();
 
 	public void Awake()
 	{
@@ -48,7 +52,7 @@ public class ExistenceController : MonoBehaviour
 			{
 				_exists = false;
 				Destroy(gameObject);
-				print("Destroyed " + name + " (LOS check).");
+				//print("Destroyed " + name + " (LOS check).");
 			}
 		}
 		else
@@ -60,25 +64,43 @@ public class ExistenceController : MonoBehaviour
 				if(renderer != null)
 					renderer.enabled = false;
 				if(collider != null)
-					collider.enabled = false;
+					collider.isTrigger = true;
 				if(rigidbody != null && !_originalIsKinematic)
 					rigidbody.isKinematic = true;
-				print("Hid " + name + " (LOS check).");
+				//print("Hid " + name + " (LOS check).");
 			}
 			else if(!_exists && exists)
 			{
 				_exists = true;
-				if(renderer != null)
-					renderer.enabled = true;
-				if(collider != null)
-					collider.enabled = true;
-				if(rigidbody != null && !_originalIsKinematic)
+				// Don't re-exist if currently colliding with another object.
+				if(_inTrigger.Count == 0)
 				{
-					rigidbody.isKinematic = false;
-					rigidbody.WakeUp();
+					if(renderer != null)
+						renderer.enabled = true;
+					if(collider != null)
+						collider.isTrigger = false;
+					if(rigidbody != null && !_originalIsKinematic)
+					{
+						rigidbody.isKinematic = false;
+						rigidbody.WakeUp();
+					}
+					//print("Showed " + name + " (LOS check).");
 				}
-				print("Showed " + name + " (LOS check).");
 			}
+		}
+	}
+	
+	public void FixedUpdate()
+	{
+		_inTrigger.Clear();
+	}
+	
+	public void OnTriggerStay(Collider c)
+	{
+		if(collider.isTrigger && CoincisionSensitive)
+		{
+			_inTrigger.Add(c);
+			//print("OnTriggerEnter " + c.name + " in " + name);
 		}
 	}
 
@@ -120,7 +142,7 @@ public class ExistenceController : MonoBehaviour
 	/// </summary>
 	private bool Raycast(Ray ray, float dist, int layerMask)
 	{
-		RaycastHit[] hits = Physics.RaycastAll(ray, dist, layerMask);
-		return hits.Length > 0 && (hits.Length > 1 || hits[0].transform != transform);
+		List<RaycastHit> hits = new List<RaycastHit>(Physics.RaycastAll(ray, dist, layerMask).Where(rh => !rh.collider.isTrigger));
+		return hits.Count > 0 && (hits.Count > 1 || hits[0].transform != transform);
 	}
 }
