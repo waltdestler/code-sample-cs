@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class Player : MonoBehaviour
 {
@@ -58,11 +60,11 @@ public class Player : MonoBehaviour
 
 					// Raycast to find edge of object.
 					Ray ray = new Ray(transform.position, c.transform.position - transform.position);
-					RaycastHit hit;
-					if(!Physics.Raycast(ray, out hit, TouchRange))
+					float range = Mathf.Min(TouchRange, (c.transform.position - transform.position).magnitude);
+					List<RaycastHit> hits = new List<RaycastHit>(Physics.RaycastAll(ray, range).Where(rh => !rh.collider.isTrigger));
+					if(hits.Count != 1 || hits[0].collider != c)
 						continue;
-					if(hit.collider != c)
-						continue;
+					RaycastHit hit = hits[0];
 
 					// In range and current closest?
 					float sqrDist = (hit.point - transform.position).sqrMagnitude;

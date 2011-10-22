@@ -36,13 +36,25 @@ public class ExistenceController : MonoBehaviour
 
 		// If every single watch point is blocked, we don't exist.
 		bool exists = false;
-		foreach(Transform t in WatchPoints)
+		// Don't re-exist if currently colliding with another object.
+		if(_inTrigger.Count == 0)
 		{
-			if(!IsLosBlocked(t.position, playerPos))
+			foreach(Transform t in WatchPoints)
 			{
-				exists = true;
-				break;
+				if(!IsLosBlocked(t.position, playerPos))
+				{
+					exists = true;
+					break;
+				}
 			}
+			
+			if(particleEmitter != null)
+				particleEmitter.emit = false;
+		}
+		else
+		{
+			if(particleEmitter != null)
+				particleEmitter.emit = true;
 		}
 
 		if(Permanent)
@@ -73,7 +85,7 @@ public class ExistenceController : MonoBehaviour
 			{
 				_exists = true;
 				// Don't re-exist if currently colliding with another object.
-				if(_inTrigger.Count == 0)
+				//if(_inTrigger.Count == 0)
 				{
 					if(renderer != null)
 						renderer.enabled = true;
