@@ -79,6 +79,9 @@ public class ExistenceController : MonoBehaviour
 					collider.isTrigger = true;
 				if(rigidbody != null && !_originalIsKinematic)
 					rigidbody.isKinematic = true;
+				BeamEmitter be = GetComponentInChildren<BeamEmitter>();
+				if(be != null)
+					be.enabled = false;
 				//print("Hid " + name + " (LOS check).");
 			}
 			else if(!_exists && exists)
@@ -96,6 +99,9 @@ public class ExistenceController : MonoBehaviour
 						rigidbody.isKinematic = false;
 						rigidbody.WakeUp();
 					}
+					BeamEmitter be = GetComponentInChildren<BeamEmitter>();
+					if(be != null)
+						be.enabled = true;
 					//print("Showed " + name + " (LOS check).");
 				}
 			}
