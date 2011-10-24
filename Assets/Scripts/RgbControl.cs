@@ -31,7 +31,10 @@ public class RgbControl : MonoBehaviour
 		{
 			_curMode = mode;
 			renderer.sharedMaterial = Constants.Global.GetMaterial(mode);
-			renderer.gameObject.layer = Layers.FromRgbMode(mode);
+			gameObject.layer = Layers.FromRgbMode(mode);
+			ParticleRenderer pr = GetComponent<ParticleRenderer>();
+			if(pr != null)
+				pr.sharedMaterial = renderer.sharedMaterial;
 		}
 		
 		RgbModeOverride = null;
