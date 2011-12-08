@@ -8,17 +8,22 @@ public class ExistenceController : MonoBehaviour
 	public Transform[] WatchPoints;
 	public bool Permanent;
 	public bool CoincisionSensitive;
+	public bool AlterMass;
 
 	private RgbControl _rgb;
 	private bool _exists = true;
 	private bool _originalIsKinematic;
+	private float _originalMass;
 	private readonly HashSet<Collider> _inTrigger = new HashSet<Collider>();
 
 	public void Awake()
 	{
 		_rgb = GetComponent<RgbControl>();
 		if(rigidbody != null)
+		{
 			_originalIsKinematic = rigidbody.isKinematic;
+			_originalMass = rigidbody.mass;
+		}
 	}
 
 	public void Update()
@@ -77,8 +82,13 @@ public class ExistenceController : MonoBehaviour
 					renderer.enabled = false;
 				if(collider != null)
 					collider.isTrigger = true;
-				if(rigidbody != null && !_originalIsKinematic)
-					rigidbody.isKinematic = true;
+				if(rigidbody != null)
+				{
+					if(!_originalIsKinematic && !AlterMass)
+						rigidbody.isKinematic = true;
+					if(AlterMass)
+						rigidbody.mass = .0001f;
+				}
 				BeamEmitter be = GetComponentInChildren<BeamEmitter>();
 				if(be != null)
 					be.enabled = false;
@@ -94,10 +104,15 @@ public class ExistenceController : MonoBehaviour
 						renderer.enabled = true;
 					if(collider != null)
 						collider.isTrigger = false;
-					if(rigidbody != null && !_originalIsKinematic)
+					if(rigidbody != null)
 					{
-						rigidbody.isKinematic = false;
-						rigidbody.WakeUp();
+						if(!_originalIsKinematic && !AlterMass)
+						{
+							rigidbody.isKinematic = false;
+							rigidbody.WakeUp();
+						}
+						if(AlterMass)
+							rigidbody.mass = _originalMass;
 					}
 					BeamEmitter be = GetComponentInChildren<BeamEmitter>();
 					if(be != null)

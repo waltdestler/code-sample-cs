@@ -1,0 +1,3 @@
+white doesn't follow rules -- build to white
+subtractive lights
+rotatable light emitters
