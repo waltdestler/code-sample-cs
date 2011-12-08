@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class PositionAction : MonoBehaviour
+public class RotationAction : MonoBehaviour
 {
-	public Vector3 StartPos;
-	public Vector3 EndPos;
+	public Vector3 RotationIncrease;
 	public float Duration = 1;
 	public float Delay = 0;
 	public AnimationCurve Curve = AnimationCurve.Linear(0, 0, 1, 1);
@@ -22,11 +21,12 @@ public class PositionAction : MonoBehaviour
 		_running = true;
 		yield return new WaitForSeconds(Delay);
 		float startTime = Time.time;
+		Vector3 startRot = transform.localEulerAngles;
 		do
 		{
 			yield return 0;
 			float t = Curve.Evaluate((Time.time - startTime) / Duration);
-			transform.position = Vector3.Lerp(StartPos, EndPos, t);
+			transform.localEulerAngles = startRot + RotationIncrease * t;
 		}
 		while(Time.time - startTime <= Duration);
 		_running = false;

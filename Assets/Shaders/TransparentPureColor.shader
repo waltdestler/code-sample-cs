@@ -3,7 +3,7 @@ Properties {
 	_Color ("Main Color", Color) = (1,1,1,1)
 }
 SubShader {
-	Tags { "RenderType"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
+	Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" }
 	LOD 200
 
 CGPROGRAM
