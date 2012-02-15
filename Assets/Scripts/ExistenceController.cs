@@ -38,7 +38,7 @@ public class ExistenceController : MonoBehaviour
 		float sqrFogDist = RenderSettings.fogEndDistance * RenderSettings.fogEndDistance;
 		if(sqrPlayerDist > sqrFogDist)
 			return;
-
+		
 		// If every single watch point is blocked, we don't exist.
 		bool exists = false;
 		// Don't re-exist if currently colliding with another object.

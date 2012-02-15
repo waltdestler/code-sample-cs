@@ -50,11 +50,11 @@ public class PauseMenu : MonoBehaviour
 
 		GUILayout.Label("Graphics Quality:");
 		GUILayout.BeginHorizontal();
-		for(int i = 0; i < 6; i++)
+		for(int i = 0; i < QualitySettings.names.Length; i++)
 		{
-			QualityLevel ql = (QualityLevel)i;
-			if(GUILayout.Toggle(QualitySettings.currentLevel == ql, ql.ToString()))
-				QualitySettings.currentLevel = ql;
+			string name = QualitySettings.names[i];
+			if(GUILayout.Toggle(QualitySettings.GetQualityLevel() == i, name))
+				QualitySettings.SetQualityLevel(i);
 		}
 		GUILayout.EndHorizontal();
 
