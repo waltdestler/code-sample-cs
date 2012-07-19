@@ -2,13 +2,16 @@
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Controls the "existence" (visibility and collisionability) of the attached object depending on whether it can be seen by the player.
+/// </summary>
 [RequireComponent(typeof(RgbControl))]
 public class ExistenceController : MonoBehaviour
 {
-	public Transform[] WatchPoints;
-	public bool Permanent;
-	public bool CoincisionSensitive;
-	public bool AlterMass;
+	public Transform[] WatchPoints; // Points to check for line-of-sight to the player. If all are blocked then the object "doesn't exist".
+	public bool Permanent; // If true, when the object is blocked, it will never "exist" again when unblocked.
+	public bool CoincisionSensitive; // If true, the object will not go from "non-existing" to "existing" if there is another object in its space.
+	public bool AlterMass; // If true, then the mass will be set to near-0 when "non-existent".
 
 	private RgbControl _rgb;
 	private bool _exists = true;
@@ -41,8 +44,7 @@ public class ExistenceController : MonoBehaviour
 		
 		// If every single watch point is blocked, we don't exist.
 		bool exists = false;
-		// Don't re-exist if currently colliding with another object.
-		if(_inTrigger.Count == 0)
+		if(_inTrigger.Count == 0) // Don't re-exist if currently colliding with another object.
 		{
 			foreach(Transform t in WatchPoints)
 			{
@@ -68,8 +70,7 @@ public class ExistenceController : MonoBehaviour
 			if(!exists)
 			{
 				_exists = false;
-				Destroy(gameObject);
-				//print("Destroyed " + name + " (LOS check).");
+				Destroy(gameObject); // Just destroy completely.
 			}
 		}
 		else
@@ -92,33 +93,27 @@ public class ExistenceController : MonoBehaviour
 				BeamEmitter be = GetComponentInChildren<BeamEmitter>();
 				if(be != null)
 					be.enabled = false;
-				//print("Hid " + name + " (LOS check).");
 			}
 			else if(!_exists && exists)
 			{
 				_exists = true;
-				// Don't re-exist if currently colliding with another object.
-				//if(_inTrigger.Count == 0)
+				if(renderer != null)
+					renderer.enabled = true;
+				if(collider != null)
+					collider.isTrigger = false;
+				if(rigidbody != null)
 				{
-					if(renderer != null)
-						renderer.enabled = true;
-					if(collider != null)
-						collider.isTrigger = false;
-					if(rigidbody != null)
+					if(!_originalIsKinematic && !AlterMass)
 					{
-						if(!_originalIsKinematic && !AlterMass)
-						{
-							rigidbody.isKinematic = false;
-							rigidbody.WakeUp();
-						}
-						if(AlterMass)
-							rigidbody.mass = _originalMass;
+						rigidbody.isKinematic = false;
+						rigidbody.WakeUp();
 					}
-					BeamEmitter be = GetComponentInChildren<BeamEmitter>();
-					if(be != null)
-						be.enabled = true;
-					//print("Showed " + name + " (LOS check).");
+					if(AlterMass)
+						rigidbody.mass = _originalMass;
 				}
+				BeamEmitter be = GetComponentInChildren<BeamEmitter>();
+				if(be != null)
+					be.enabled = true;
 			}
 		}
 	}
@@ -133,10 +128,12 @@ public class ExistenceController : MonoBehaviour
 		if(collider.isTrigger && CoincisionSensitive)
 		{
 			_inTrigger.Add(c);
-			//print("OnTriggerEnter " + c.name + " in " + name);
 		}
 	}
 
+	/// <summary>
+	/// Returns whether the line-of-sight between the specified points is blocked in all color channels of which the attached object is a member.
+	/// </summary>
 	private bool IsLosBlocked(Vector3 start, Vector3 end)
 	{
 		Vector3 posDiff = end - start;

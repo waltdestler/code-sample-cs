@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// A serializable object in the Resources folder that stores global constants.
@@ -8,6 +7,7 @@ public class Constants : ScriptableObject
 {
 	#region Public Fields
 
+	// The materials for each RgbMode.
 	public Material RgbMaterial;
 	public Material RMaterial;
 	public Material GMaterial;
@@ -40,6 +40,9 @@ public class Constants : ScriptableObject
 	#endregion
 	#region Public Methods
 
+	/// <summary>
+	/// Returns the Material that corresponds to the specified RgbMode.
+	/// </summary>
 	public Material GetMaterial(RgbMode mode)
 	{
 		switch(mode)
@@ -56,15 +59,4 @@ public class Constants : ScriptableObject
 	}
 
 	#endregion
-}
-
-[Flags] public enum RgbMode
-{
-	R = 1,
-	G = 2,
-	B = 4,
-	Rg = 3,
-	Rb = 5,
-	Gb = 6,
-	Rgb = 7,
 }

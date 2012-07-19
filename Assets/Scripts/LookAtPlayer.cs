@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Causes the transform of the attached object to always "look at" the player.
+/// </summary>
 public class LookAtPlayer : MonoBehaviour
 {
-	public bool LockXRot;
-	public bool LockYRot;
-	public bool LockZRot;
+	public bool LockXRot; // If set, the X rotation will not be modified.
+	public bool LockYRot; // If set, the Y rotation will not be modified.
+	public bool LockZRot; // If set, the Z rotation will not be modified.
 
 	public void Update()
 	{

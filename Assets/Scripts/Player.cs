@@ -2,16 +2,22 @@
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Contains object for the player-controlled game object.
+/// </summary>
 public class Player : MonoBehaviour
 {
+	/// <summary>
+	/// The current Player object in the scene.
+	/// </summary>
 	public static Player Current { get; private set; }
 
-	public Transform Eyepoint;
-	public Transform CarryPoint;
-	public float TouchRange = 2;
-	public CameraCombiner CameraCombiner;
+	public Transform Eyepoint; // Line-of-sight checks will be made to this point.
+	public Transform CarryPoint; // Carried objects will be set to this point.
+	public float TouchRange = 2; // Maximum distance from which an object can be picked up or clicked.
+	public CameraCombiner CameraCombiner; // The object that combines the outputs of the separate red, green, and blue cameras.
 
-	private Carryable _carriedObject;
+	private Carryable _carriedObject; // The object currently being carried, if any.
 
 	public void OnEnable()
 	{
@@ -77,7 +83,6 @@ public class Player : MonoBehaviour
 							closestCarryable = carryable;
 							closestClickTrigger = null;
 							closestSqrDist = sqrDist;
-							continue;
 						}
 						
 						// Clickable?
@@ -87,7 +92,6 @@ public class Player : MonoBehaviour
 							closestCarryable = null;
 							closestClickTrigger = ct;
 							closestSqrDist = sqrDist;
-							continue;
 						}
 					}
 				}

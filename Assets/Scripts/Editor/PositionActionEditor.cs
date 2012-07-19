@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
+/// <summary>
+/// A custom editor that allows the start and end points of a PositionAction to be easily set.
+/// </summary>
 [CustomEditor(typeof(PositionAction))]
 public class PositionActionEditor : Editor
 {

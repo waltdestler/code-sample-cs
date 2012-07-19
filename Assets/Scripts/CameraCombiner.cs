@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Combines the outputs of three cameras into one.
+/// Combines the outputs of three red, green, and blue channel cameras into one render.
 /// </summary>
 [RequireComponent(typeof(Camera))]
 public class CameraCombiner : MonoBehaviour
@@ -77,6 +77,9 @@ public class CameraCombiner : MonoBehaviour
 		GL.PopMatrix();
 	}
 
+	/// <summary>
+	/// A coroutine that fades from black into the game.
+	/// </summary>
 	private IEnumerator FadeIn()
 	{
 		Color startColor = Color.black;
@@ -100,6 +103,9 @@ public class CameraCombiner : MonoBehaviour
 		while(Time.time - startTime <= FadeInTime);
 	}
 
+	/// <summary>
+	/// A coroutine that fades from the game out to black.
+	/// </summary>
 	private IEnumerator FadeOut()
 	{
 		Color startColor = new Color(

@@ -2,7 +2,8 @@
 using UnityEngine;
 
 /// <summary>
-/// Renders one scene color into a render texture.
+/// Controls the camera for a single color channel. Renders the camera into a RenderTexture, which will
+/// then be combined by CameraCombiner into the final output.
 /// </summary>
 [RequireComponent(typeof(Camera))]
 public class ColorCam : MonoBehaviour
@@ -11,6 +12,7 @@ public class ColorCam : MonoBehaviour
 
 	public void LateUpdate()
 	{
+		// Recreate the RenderTexture if it doesn't exist or isn't the right size.
 		if(RenderTexture == null || RenderTexture.width != Screen.width || RenderTexture.height != Screen.height)
 		{
 			if(RenderTexture != null)

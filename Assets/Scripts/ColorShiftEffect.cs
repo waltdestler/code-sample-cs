@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// An image effect that transforms the entire color spectrum of the current rendered image.
+/// </summary>
 [ExecuteInEditMode]
 public class ColorShiftEffect : ImageEffectBase
 {
-	public float HueShiftDegrees;
-	public float SaturationFactor = 1;
-	public float ValueFactor = 1;
-	public bool OverrideColorBlindSetting;
+	public float HueShiftDegrees; // Degrees by which the hue will be shifted.
+	public float SaturationFactor = 1; // Scale of color saturation.
+	public float ValueFactor = 1; // Scale of color value.
+	public bool OverrideColorBlindSetting; // If true, HueShiftDegrees will be set every frame to match Settings.ColorBlindHueShift.
 
 	public void Update()
 	{
+		// Automatically set HueShiftDegrees?
 		if(!OverrideColorBlindSetting)
 			HueShiftDegrees = Settings.ColorBlindHueShift;
 	}
@@ -17,6 +21,7 @@ public class ColorShiftEffect : ImageEffectBase
 	// Called by camera to apply image effect
 	public void OnRenderImage(RenderTexture source, RenderTexture destination)
 	{
+		// Creates a color transformation matrix that is sent to the effect shader.
 		// Algorithm taken from: http://beesbuzz.biz/code/hsv_color_transforms.php
 
 		float h = HueShiftDegrees;

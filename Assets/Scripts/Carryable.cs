@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Marks an object as able to be carried by the player
+/// When attached to an object, the object becomes "carryable" by the player.
 /// </summary>
 public class Carryable : MonoBehaviour
 {
-	public bool IsCarryable = true;
-	public float ControllerRadius = .8f;
+	public bool IsCarryable = true; // Set to false to disable carrying.
+	public float ControllerRadius = .8f; // When being carried, this is the radius of the CharacterController attached to the object to handle collisions.
 
 	private bool _wasKinematic;
 	private bool _wasColliderEnabled;
 	private CharacterController _cc;
 
+	/// <summary>
+	/// Called when the object is picked up by the player.
+	/// </summary>
 	public void OnCarry(Player player)
 	{
 		if(collider != null)
@@ -30,6 +33,9 @@ public class Carryable : MonoBehaviour
 		_cc.radius = ControllerRadius;
 	}
 
+	/// <summary>
+	/// Called when the object is put down by the player.
+	/// </summary>
 	public void OnDrop(Player player)
 	{
 		Destroy(_cc);
@@ -45,9 +51,11 @@ public class Carryable : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Called when the player moves to move the carried object to a specified position.
+	/// </summary>
 	public void MoveTo(Vector3 position, Quaternion rotation)
 	{
-		//transform.position = position;
 		Vector3 posDiff = position - transform.position;
 		_cc.Move(posDiff);
 		transform.rotation = rotation;

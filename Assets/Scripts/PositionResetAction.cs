@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// A simple action that, when triggered, resets the position of an object to its original position.
+/// </summary>
 public class PositionResetAction : MonoBehaviour
 {
 	private Vector3 _pos;
@@ -9,6 +12,7 @@ public class PositionResetAction : MonoBehaviour
 
 	public void Awake()
 	{
+		// Record original transform and velocities.
 		_pos = transform.position;
 		_rot = transform.rotation;
 		if(rigidbody != null)
@@ -18,8 +22,12 @@ public class PositionResetAction : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Called when the trigger has been activated.
+	/// </summary>
 	public void DoActivateTrigger()
 	{
+		// Restore original transform and velocities.
 		transform.position = _pos;
 		transform.rotation = _rot;
 		if(rigidbody != null)
