@@ -10,7 +10,7 @@ public class PositionActionEditor : Editor
 		PositionAction pa = (PositionAction)target;
 		if(GUILayout.Button("Set Start as Current"))
 			pa.StartPos = pa.transform.position;
-		if(GUILayout.Button("Set Start as Current"))
+		if(GUILayout.Button("Set End as Current"))
 			pa.EndPos = pa.transform.position;
 		if(GUILayout.Button("Set Current as Start"))
 			pa.transform.position = pa.StartPos;
