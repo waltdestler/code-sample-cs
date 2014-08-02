@@ -40,23 +40,23 @@ public class ActivateTrigger : MonoBehaviour {
 					}
 					break;
 				case Mode.Activate:
-					targetGameObject.active = true;
+					targetGameObject.SetActive(true);
 					break;
 				case Mode.Enable:
 					if (targetBehaviour != null)
 						targetBehaviour.enabled = true;
 					break;	
 				case Mode.Animate:
-					targetGameObject.animation.Play ();
+					targetGameObject.GetComponent<Animation>().Play ();
 					break;	
 				case Mode.Deactivate:
-					targetGameObject.active = false;
+					targetGameObject.SetActive(false);
 					break;
 			}
 		}
 	}
 
-	public void OnTriggerEnter (Collider other) {
+	void OnTriggerEnter (Collider other) {
 		DoActivateTrigger ();
 	}
 }
