@@ -10,13 +10,13 @@ public class BeamEmitter : MonoBehaviour
 	
 	public void OnEnable()
 	{
-		Beam.gameObject.SetActiveRecursively(true);
+		Beam.gameObject.SetActive(true);
 	}
 	
 	public void OnDisable()
 	{
 		if(Beam != null)
-			Beam.gameObject.SetActiveRecursively(false);
+			Beam.gameObject.SetActive(false);
 	}
 	
 	public void LateUpdate()
